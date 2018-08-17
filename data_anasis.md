@@ -85,10 +85,11 @@ for dataset in combine:
 
 `dataset['Sex'] = dataset['Sex'].map( {'female': 1, 'male': 0} ).astype(int)`
 
-3. 补全连续型数字特征
-> - 使用所有数据项的均值。
-> - 结合该特征和其它特征的相关性确定缺失值。
-`for dataset in combine:
+ 3. 补全连续型数字特征
+ > - 使用所有数据项的均值。
+ 
+ > - 结合该特征和其它特征的相关性确定缺失值。
+**for dataset in combine:
     for i in range(0, 2):
         for j in range(0, 3):
             guess_df = dataset[(dataset['Sex'] == i) & \
@@ -98,31 +99,40 @@ for dataset in combine:
  for i in range(0, 2):
         for j in range(0, 3):
             dataset.loc[ (dataset.Age.isnull()) & (dataset.Sex == i) & (dataset.Pclass == j+1),\
-                    'Age'] = guess_ages[i,j]`
+                    'Age'] = guess_ages[i,j]**
 
-> - 结合以上两种方法。
+ > - 结合以上两种方法。
 
-4. 将连续型数字特征转化为区间特征，并观察新特征和目标值之间的相关性。如果具有显著相关性，则可以将原有特征表示为序数性特征，并删除区间特征。
-`train_df['AgeBand'] = pd.cut(train_df['Age'], 5)
+ 4. 将连续型数字特征转化为区间特征，并观察新特征和目标值之间的相关性。如果具有显著相关性，则可以将原有特征表示为序数性特征，并删除区间特征。
+**train_df['AgeBand'] = pd.cut(train_df['Age'], 5)
 train_df[['AgeBand', 'Survived']].groupby(['AgeBand'], as_index=False).mean().sort_values(by='AgeBand', ascending=True)
 
-for dataset in combine:    
+ for dataset in combine:    
     dataset.loc[ dataset['Age'] <= 16, 'Age'] = 0
     dataset.loc[(dataset['Age'] > 16) & (dataset['Age'] <= 32), 'Age'] = 1
     dataset.loc[(dataset['Age'] > 32) & (dataset['Age'] <= 48), 'Age'] = 2
     dataset.loc[(dataset['Age'] > 48) & (dataset['Age'] <= 64), 'Age'] = 3
-    dataset.loc[ dataset['Age'] > 64, 'Age']`
+    dataset.loc[ dataset['Age'] > 64, 'Age']**
 
-5.组合原有特征生成新特征
+ 5.组合原有特征生成新特征
 
-`for dataset in combine:
+**for dataset in combine:
     dataset['FamilySize'] = dataset['SibSp'] + dataset['Parch'] + 1
 
-train_df[['FamilySize', 'Survived']].groupby(['FamilySize'], as_index=False).mean().sort_values(by='Survived', ascending=False)`
+  train_df[['FamilySize', 'Survived']].groupby(['FamilySize'], as_index=False).mean().sort_values(by='Survived', ascending=False)*
 
-6.补全类别型特征
+ 6.补全类别型特征
 
-在补全类别型特征时，通常选取其中最频繁出现的数据值
+  在补全类别型特征时，通常选取其中最频繁出现的数据值
 
-`freq_port = train_df.Embarked.dropna().mode()[0]
-train_df[['Embarked', 'Survived']].groupby(['Embarked'], as_index=False).mean().sort_values(by='Survived', ascending=False)`
+**freq_port = train_df.Embarked.dropna().mode()[0]
+train_df[['Embarked', 'Survived']].groupby(['Embarked'], as_index=False).mean().sort_values(by='Survived', ascending=False)**
+
+
+## 第二阶段
+
+### 模型选取,训练,测试,修正
+根据问题特征选取合适模型(**目前还没有深入研究**）
+
+## 第三阶段
+还没有实际经验，下周会进行实战。
