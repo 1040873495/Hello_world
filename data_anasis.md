@@ -76,14 +76,13 @@
 1. 直接剔除和目标值不相关的的特征。
 2.从已有特征中提取新的特征，比如可以从name提取出title这一特征，并判断这一特征和目标值之间的相关性，如果具有明显的相关性，则将新特征保留，并将类别型
 特征转换为序数型特征。（主要是对文本性质的类别特征进行转换).
-`dataset['Title'] = dataset.Name.str.extract(' ([A-Za-z]+)\.', expand=False)`
-`train_df[['Title', 'Survived']].groupby(['Title'], as_index=False).mean()`
-`title_mapping = {"Mr": 1, "Miss": 2, "Mrs": 3, "Master": 4, "Rare": 5}
+**dataset['Title'] = dataset.Name.str.extract(' ([A-Za-z]+)\.', expand=False)
+train_df[['Title', 'Survived']].groupby(['Title'], as_index=False).mean()
+title_mapping = {"Mr": 1, "Miss": 2, "Mrs": 3, "Master": 4, "Rare": 5}
 for dataset in combine:
     dataset['Title'] = dataset['Title'].map(title_mapping)
-    dataset['Title'] = dataset['Title'].fillna(0)`
-
-`dataset['Sex'] = dataset['Sex'].map( {'female': 1, 'male': 0} ).astype(int)`
+    dataset['Title'] = dataset['Title'].fillna(0)
+dataset['Sex'] = dataset['Sex'].map( {'female': 1, 'male': 0} ).astype(int)**
 
  3. 补全连续型数字特征
  > - 使用所有数据项的均值。
@@ -107,7 +106,7 @@ for dataset in combine:
 **train_df['AgeBand'] = pd.cut(train_df['Age'], 5)
 train_df[['AgeBand', 'Survived']].groupby(['AgeBand'], as_index=False).mean().sort_values(by='AgeBand', ascending=True)
 
- for dataset in combine:    
+ **for dataset in combine:    
     dataset.loc[ dataset['Age'] <= 16, 'Age'] = 0
     dataset.loc[(dataset['Age'] > 16) & (dataset['Age'] <= 32), 'Age'] = 1
     dataset.loc[(dataset['Age'] > 32) & (dataset['Age'] <= 48), 'Age'] = 2
@@ -118,8 +117,7 @@ train_df[['AgeBand', 'Survived']].groupby(['AgeBand'], as_index=False).mean().so
 
 **for dataset in combine:
     dataset['FamilySize'] = dataset['SibSp'] + dataset['Parch'] + 1
-
-  train_df[['FamilySize', 'Survived']].groupby(['FamilySize'], as_index=False).mean().sort_values(by='Survived', ascending=False)*
+  train_df[['FamilySize', 'Survived']].groupby(['FamilySize'], as_index=False).mean().sort_values(by='Survived', ascending=False)**
 
  6.补全类别型特征
 
